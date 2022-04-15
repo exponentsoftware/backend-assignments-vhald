@@ -8,7 +8,7 @@ module.exports.createTodo = async (req, res) => {
         username: req.body.username,
         title: req.body.title,
         category: req.body.category,
-        completed: req.body.is_Complete,
+        completed: req.body.completed,
     });
     try {
         const savedTodo = await newTodo.save();
@@ -19,7 +19,7 @@ module.exports.createTodo = async (req, res) => {
     }
 };
 
-// GET all todos
+// GET all
 module.exports.getAllTodo = async (req, res) => {
     try {
         const todoAll = await Todo.find();
@@ -29,7 +29,7 @@ module.exports.getAllTodo = async (req, res) => {
     }
 };
 
-//GET one TODO
+//GET one
 module.exports.getOneTodo = async (req, res) => {
     try {
         const todoOne = await Todo.findById(req.params.id);
