@@ -20,4 +20,6 @@ router.get('/titlewise/:title', Todo.fetchByTitle)
 router.get('/sort/sortMe', Todo.sortTodo)
 router.patch('/updateStatus/:id', Todo.updateStatus)
 
+// Day 3 : 
+
 module.exports = router;
