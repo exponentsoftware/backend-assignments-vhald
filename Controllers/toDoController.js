@@ -4,6 +4,10 @@ const Todo = require("../Models/ToDoModel");
 
 //CREATE TODO
 module.exports.createTodo = async (req, res) => {
+    // const { username, title, completed, category } = req.body
+    // if (!username || !title || !completed || !category) {
+    //     return res.status(400).json({ message: "please enter all fields" });
+    // }
     const newTodo = new Todo({
         username: req.body.username,
         title: req.body.title,
@@ -19,12 +23,15 @@ module.exports.createTodo = async (req, res) => {
     }
 };
 
-// GET all
+// GET all 
 module.exports.getAllTodo = async (req, res) => {
     try {
-        const todoAll = await Todo.find();
-        res.status(200).json(todoAll);
-    } catch (err) {
+        await Todo.find()
+            .then((todos) => {
+                res.status(200).json(todos)
+            })
+    }
+    catch (err) {
         res.status(500).json(err);
     }
 };
@@ -40,10 +47,8 @@ module.exports.getOneTodo = async (req, res) => {
 };
 
 //UPDATE todo
-
 module.exports.updateTodo = async (req, res) => {
     const id = req.params.id;
-    console.log(id);
     await Todo.updateOne(
         { _id: id },
         {
@@ -80,3 +85,57 @@ module.exports.deleteTodo = async (req, res) => {
         res.status(500).json(err);
     }
 };
+
+// --- DAY 2 ----
+
+// fetch by category name
+module.exports.fetchByCategory = async (req, res) => {
+    const category = req.params.category
+    await Todo.find({ category: category })
+        .then((todo) => {
+            res.status(200).json(todo)
+        })
+        .catch(err => {
+            res.status(500).json({ message: err.message })
+        })
+}
+
+// fetch By Title name
+module.exports.fetchByTitle = async (req, res) => {
+    const title = req.params.title
+    await Todo.find({ title: title })
+        .then(todo => {
+            res.status(200).json(todo)
+        })
+        .catch(err => {
+            res.status(500).json({ message: err.message })
+        })
+}
+
+// sorting by createdAt
+module.exports.sortTodo = async (req, res) => {
+    try {
+        await Todo.find()
+            .sort({ createdAt: -1 }) // latest first sorting
+            .then((todos) => {
+                res.status(200).json(todos)
+            })
+    }
+    catch (err) {
+        res.status(500).json(err);
+    }
+};
+
+
+// Completed Task
+module.exports.updateStatus = async (req, res) => {
+    const id = req.params.id
+    await Todo.updateOne({ _id: { $eq: id } }, { completed: true })
+        .then((todo) => {
+            res.status(200).json({ message: "task completed" })
+        })
+        .catch(err => {
+            res.status(500).json({ message: err.message })
+        })
+}
+
