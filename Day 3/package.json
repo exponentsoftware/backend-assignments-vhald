@@ -1,0 +1,30 @@
+{
+    "dependencies": {
+        "bcrypt": "^5.0.1",
+        "dotenv": "^16.0.0",
+        "express": "^4.17.3",
+        "express-async-handler": "^1.2.0",
+        "jsonwebtoken": "^8.5.1",
+        "mongoose": "^6.3.0",
+        "nodemon": "^2.0.15"
+    },
+    "name": "backend-assignments-vhald",
+    "description": "- Create APIs to get all, get by id, add, update by id and delete by id a TODO list\r - Should use MongoDB as a database\r - API should not have any additional routes",
+    "version": "1.0.0",
+    "main": "app.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node app.js",
+        "dev": "nodemon app.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/exponentsoftware/backend-assignments-vhald.git"
+    },
+    "author": "vaibhav haldia",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/exponentsoftware/backend-assignments-vhald/issues"
+    },
+    "homepage": "https://github.com/exponentsoftware/backend-assignments-vhald#readme"
+}
