@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const User = require("./UserModel");
+
 
 const todoSchema = new mongoose.Schema({
     userId: {
