@@ -152,7 +152,7 @@ module.exports.deleteOneUser = async (req, res) => {
 
 
 // number of registered users for the Day
-
+// used params because query was throwing error
 module.exports.todayRegistered = async (req, res) => {
     //const todayDate = new Date()
     let { page = 1, limit = 10 } = req.params;
