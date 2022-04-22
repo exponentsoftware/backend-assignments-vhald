@@ -1,13 +1,17 @@
 const User = require('../models/UserModel')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const Todo = require('../models/ToDoModel');
 
 // TODO list with pagination
 // Add Pagination on all get routes
 module.exports.getAll = async (req, res) => {
     //pagination part limiting and control the data using page and limit
-    let { page = 1, limit = 10 } = req.query
 
+    // changed to params because query was giving errors
+    let { page = 1, limit = 10 } = req.params;
+    page = parseInt(page)
+    limit = parseInt(limit)
     User.find().populate('todoList')
         .skip((page - 1) * limit)
         .limit(limit)
@@ -132,3 +136,92 @@ module.exports.deleteOneUser = async (req, res) => {
             res.status(500).json({ message: err.message })
         })
 }
+
+
+// -- pagination Day 5 - 
+
+// Add Pagination on all get routes - done
+// Api should be able to take in two fields - page number and no. of records - done
+// Pagination should work with existing features  - done
+// Create an API to get number of registered users for the Day  - done
+// Create API to get active users for the below:
+// for current day
+// for a week
+// for a month
+
+
+
+// number of registered users for the Day
+
+module.exports.todayRegistered = async (req, res) => {
+    //const todayDate = new Date()
+    let { page = 1, limit = 10 } = req.params;
+    page = parseInt(page)
+    limit = parseInt(limit)
+    User.find({
+        createdAt: {
+            $lt: new Date(),
+            $gte: new Date(new Date().setDate(new Date().getDate() - 1))
+        }
+    })
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .then((user) => {
+            res.status(200).json(user)
+        })
+        .catch(err => {
+            res.status(500).json({ message: err.message })
+        })
+}
+
+
+// active users for a today
+module.exports.todayActive = async (req, res) => {
+    let { page = 1, limit = 10 } = req.params;
+    page = parseInt(page)
+    limit = parseInt(limit)
+    await Todo.aggregate([{ $match: { updatedAt: { $lt: new Date(), $gte: new Date(new Date().setDate(new Date().getDate() - 1)) } } }, { $project: { userId: 1 } }])
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .then((todo) => {
+            res.status(200).json(todo)
+        })
+        .catch(err => {
+            res.status(500).json({ message: err.message })
+        })
+}
+
+
+// active users for a week
+module.exports.weekActive = async (req, res) => {
+    let { page = 1, limit = 10 } = req.params;
+    page = parseInt(page)
+    limit = parseInt(limit)
+    await Todo.aggregate([{ $match: { updatedAt: { $lt: new Date(), $gte: new Date(new Date().setDate(new Date().getDate() - 7)) } } }, { $project: { userId: 1 } }])
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .then((todo) => {
+            res.status(200).json(todo)
+        })
+        .catch(err => {
+            res.status(500).json({ message: err.message })
+        })
+}
+
+// active users for a month
+module.exports.monthActive = async (req, res) => {
+    let { page = 1, limit = 10 } = req.params;
+    page = parseInt(page)
+    limit = parseInt(limit)
+    await Todo.aggregate([{ $match: { updatedAt: { $lt: new Date(), $gte: new Date(new Date().setDate(new Date().getDate() - 30)) } } }, { $project: { userId: 1 } }])
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .then((todo) => {
+            res.status(200).json(todo)
+        })
+        .catch(err => {
+            res.status(500).json({ message: err.message })
+        })
+}
+
+

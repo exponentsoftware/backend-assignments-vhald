@@ -159,7 +159,7 @@ module.exports.updateStatus = async (req, res) => {
         if (!isMatch) {
             return res.status(401).json({ message: 'You are not authorized' })
         } else {
-            Todo.updateOne({ _id: { $eq: id } }, { status: "Done" })
+            Todo.updateOne({ _id: { $eq: req.params.id } }, { completed: true })
                 .then((todo) => {
                     res.status(200).json({ message: "Status updated to Done" })
                 })

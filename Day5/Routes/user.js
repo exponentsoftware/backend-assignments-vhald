@@ -2,17 +2,24 @@ const express = require('express')
 const router = express.Router()
 const userController = require('../Controllers/userController')
 
-const passport = require('passport');
-require('../Middleware/admin')(passport);
+const adminAuth = require('../Middleware/admin')
 
+// pagination to users info
+router.get('/:page/:limit', adminAuth, userController.getAll)
 
-router.get('/', passport.authenticate('jwt', { session: false }), userController.getAll)
+router.get('/', adminAuth, userController.getAll)
 router.post('/signup', userController.addUser)
 router.post('/login', userController.getLogIn)
-router.get('/:id', passport.authenticate('jwt', { session: false }), userController.getOneUser)
-router.patch('/:id', passport.authenticate('jwt', { session: false }), userController.updateOneUser)
-router.delete('/:id', passport.authenticate('jwt', { session: false }), userController.deleteOneUser)
-router.get('/passportTest', passport.authenticate('jwt', { session: false }))
+router.get('/:id', adminAuth, userController.getOneUser)
+router.patch('/:id', adminAuth, userController.updateOneUser)
+router.delete('/:id', adminAuth, userController.deleteOneUser)
+
+// DAY 5 pagination
+
+router.get('/todayRegistered/:page/:limit', userController.todayRegistered)
+router.get('/todayActive/:page/:limit', userController.todayActive)
+router.get('/weekActive/:page/:limit', userController.todayActive)
+router.get('/monthActive/:page/:limit', userController.todayActive)
 
 
 module.exports = router
