@@ -8,25 +8,24 @@ const Todo = require("../Controllers/toDoController");
 const userAuth = require("../Middleware/user");
 const adminAuth = require("../Middleware/admin");
 
-// passport config
-const passport = require("Passport");
-require("../Middleware/admin")(passport);
+
 
 
 // Only signed In user can only be able to call the routes
-router.post('/add', passport.authenticate('jwt', { session: false }), Todo.createTodo)
-router.get('/showTodo', passport.authenticate('jwt', { session: false }), Todo.getUserTodo);
-router.get('/getOne/:id', passport.authenticate('jwt', { session: false }), Todo.getIdTodo)
-router.put('/updateOne/:id', passport.authenticate('jwt', { session: false }), Todo.updateTodo)
-router.delete('/deleteOne/:id', passport.authenticate('jwt', { session: false }), Todo.deleteTodo)
+router.post('/add', userAuth, Todo.createTodo)
+router.get('/showTodo', userAuth, Todo.getUserTodo);
+router.get('/showAdminTodo', adminAuth, Todo.getAdminTodo);
+router.get('/getOne/:id', userAuth, Todo.getIdTodo)
+router.put('/updateOne/:id', userAuth, Todo.updateTodo)
+router.delete('/deleteOne/:id', userAuth, Todo.deleteTodo)
 
 //day2 routes
 
-router.get('/categorywise/:category', passport.authenticate('jwt', { session: false }), Todo.fetchByCategory)
-router.get('/titlewise/:title', passport.authenticate('jwt', { session: false }), Todo.fetchByTitle)
-router.get('/sortByDate', passport.authenticate('jwt', { session: false }), Todo.sortTodo)
-router.patch('/updateStatus/:id', passport.authenticate('jwt', { session: false }), Todo.updateStatus)
-router.patch('/updateStatusByAdmin/:id', passport.authenticate('jwt', { session: false }), Todo.updateStatusByAdmin)
+router.get('/categorywise/:category', adminAuth, Todo.fetchByCategory)
+router.get('/titlewise/:title', adminAuth, Todo.fetchByTitle)
+router.get('/sortByDate', adminAuth, Todo.sortTodo)
+router.patch('/updateStatus/:id', adminAuth, Todo.updateStatus)
+router.patch('/updateStatusByAdmin/:id', adminAuth, Todo.updateStatusByAdmin)
 
 
 module.exports = router;
